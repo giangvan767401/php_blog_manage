@@ -15,8 +15,7 @@
                     <a href="{{ route('news.show', $item->id) }}">{{ $item->title }}</a>
                 </h3>
                 <p>{{ $item->summary }}</p>
-
-                @auth
+                @if(auth()->check()&&auth()->user()->role==='admin')
                     <a href="{{ route('news.edit', $item->id) }}" class="btn btn-warning">Sửa</a>
                     
                     <form action="{{ route('news.destroy', $item->id) }}" method="POST" style="display:inline;">
@@ -24,7 +23,7 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Xoá</button>
                     </form>
-                @endauth
+                @endif
             </li>
         @endforeach
     </ul>
