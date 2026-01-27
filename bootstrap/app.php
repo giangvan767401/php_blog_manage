@@ -12,8 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias(['check.admin', AdminMiddleware::class]);
+        $middleware->alias([
+            'check.admin' => AdminMiddleware::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->respond(function ($response, $e, $request) {
+            if ($response->getStatusCode() === 419) {
+                return redirect()->route('login')->withErrors(['session' => 'Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.']);
+            }
+            return $response;
+        });
     })->create();
