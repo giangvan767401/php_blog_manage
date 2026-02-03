@@ -18,6 +18,17 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/notifications/{id}/mark-as-read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
     Route::post('/notifications/mark-all-as-read', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+
+    // Writer Request
+    Route::post('/request-writer', [\App\Http\Controllers\AdminUserController::class, 'requestWriter'])->name('writer.request');
+});
+
+// Admin Routes for Writer Management
+Route::middleware(['auth', 'check.admin'])->group(function () {
+    Route::get('/admin/writer-requests', [\App\Http\Controllers\AdminUserController::class, 'writerRequests'])->name('admin.writer.requests');
+    // We use post to avoid CSRF issues and keep it RESTful for actions
+    Route::post('/admin/writer-requests/{id}/approve', [\App\Http\Controllers\AdminUserController::class, 'approveWriter'])->name('admin.writer.approve');
+    Route::post('/admin/writer-requests/{id}/reject', [\App\Http\Controllers\AdminUserController::class, 'rejectWriter'])->name('admin.writer.reject');
 });
 
 require __DIR__.'/auth.php';
