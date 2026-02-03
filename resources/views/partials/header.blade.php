@@ -59,8 +59,16 @@
 
                             <span class="text-gray-700 text-sm">Hello, {{ Auth::user()->name }}</span>
                             @if(Auth::user()->role === 'admin')
+                                <a href="{{ route('admin.writer.requests') }}" class="text-sm text-green-600 hover:text-green-900 border border-green-600 px-3 py-1 rounded">Yêu cầu Writer</a>
                                 <a href="{{ route('admin.news.index') }}" class="text-sm text-blue-600 hover:text-blue-900 border border-blue-600 px-3 py-1 rounded">Duyệt bài</a>
                                 <a href="{{ route('dashboard') }}" class="text-sm text-gray-600 hover:text-gray-900 border border-gray-600 px-3 py-1 rounded">Admin Dashboard</a>
+                            @elseif(Auth::user()->canRequestWriter())
+                                <form action="{{ route('writer.request') }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" class="text-sm text-indigo-600 hover:text-indigo-900 border border-indigo-600 px-3 py-1 rounded">Đăng ký làm người viết</button>
+                                </form>
+                            @elseif(Auth::user()->hasPendingWriterRequest())
+                                <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded italic font-medium">Đang chờ duyệt Writer...</span>
                             @endif
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
