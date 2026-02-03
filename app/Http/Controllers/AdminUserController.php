@@ -7,17 +7,36 @@ use Illuminate\Http\Request;
 
 class AdminUserController extends Controller
 {
-    public function writerRequests()
+    public function writersIndex()
     {
         if (auth()->user()->role !== User::ROLE_ADMIN) {
             abort(403);
         }
 
-        $users = User::where('writer_status', User::WRITER_STATUS_PENDING)
+        $pendingWriters = User::where('writer_status', User::WRITER_STATUS_PENDING)
             ->latest()
-            ->paginate(15);
+            ->get();
 
-        return view('admin.users.writer_requests', compact('users'));
+        $activeWriters = User::where('role', User::ROLE_WRITER)
+            ->latest()
+            ->get();
+
+        return view('admin.writers.index', compact('pendingWriters', 'activeWriters'));
+    }
+
+    public function demoteWriter($id)
+    {
+        if (auth()->user()->role !== User::ROLE_ADMIN) {
+            abort(403);
+        }
+
+        $user = User::findOrFail($id);
+        $user->update([
+            'role' => User::ROLE_USER,
+            'writer_status' => User::WRITER_STATUS_NONE
+        ]);
+
+        return redirect()->back()->with('success', "Đã gỡ quyền Writer của {$user->name}");
     }
 
     public function approveWriter($id)
