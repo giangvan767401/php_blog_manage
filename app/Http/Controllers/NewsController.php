@@ -74,6 +74,7 @@ class NewsController extends Controller
      
     public function create()
     {
+        $this->authorize('create', News::class);
         $categories = Category::all();
         return view('news.create', compact('categories'));
     }
@@ -81,6 +82,7 @@ class NewsController extends Controller
     
     public function store(Request $request)
     {
+        $this->authorize('create', News::class);
         $validatedData = $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
@@ -138,10 +140,7 @@ class NewsController extends Controller
     {
         $news = News::findOrFail($id);
         
-        // Kiểm tra quyền: Chỉ tác giả hoặc admin mới được sửa
-        if (auth()->id() !== $news->user_id && auth()->user()->role !== 'admin') {
-            abort(403, 'Bạn không có quyền sửa bài viết này.');
-        }
+        $this->authorize('update', $news);
 
         $categories = Category::all();
         return view('news.edit', compact('news', 'categories'));
@@ -152,10 +151,7 @@ class NewsController extends Controller
     {
         $news = News::findOrFail($id);
 
-        // Kiểm tra quyền: Chỉ tác giả hoặc admin mới được cập nhật
-        if (auth()->id() !== $news->user_id && auth()->user()->role !== 'admin') {
-            abort(403, 'Bạn không có quyền cập nhật bài viết này.');
-        }
+        $this->authorize('update', $news);
 
         $request->validate([
             'title' => 'required|max:255',
@@ -211,10 +207,8 @@ class NewsController extends Controller
     {
         $news = News::findOrFail($id);
 
-        // Kiểm tra quyền: Chỉ tác giả hoặc admin mới được xóa
-        if (auth()->id() !== $news->user_id && auth()->user()->role !== 'admin') {
-            abort(403, 'Bạn không có quyền xóa bài viết này.');
-        }
+        $this->authorize('delete', $news);
+
         if ($news->image_path) {
             \Illuminate\Support\Facades\Storage::disk('public')->delete($news->image_path);
         }
