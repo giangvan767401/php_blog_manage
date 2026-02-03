@@ -32,7 +32,6 @@ class CommentController extends Controller
     public function store(Request $request, News $news)
     {
         $data = $request->validate([
-            'title' => 'nullable|string|max:255',
             'content' => 'required|string|min:2',
         ]);
 
@@ -41,7 +40,7 @@ class CommentController extends Controller
 
         Comment::create($data);
 
-        return redirect()->route('news.show', $news)->with('success', 'Bình luận của bạn đã được gửi thành công!');
+        return redirect()->route('news.show', $news);
     }
 
     /**

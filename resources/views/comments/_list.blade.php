@@ -21,10 +21,6 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                         <div class="flex items-center gap-2">
                             <span class="font-bold text-gray-900">{{ $comment->author?->name ?? 'Khách' }}</span>
-                            @if($comment->title)
-                                <span class="text-gray-300">|</span>
-                                <span class="text-sm font-semibold text-blue-600">{{ $comment->title }}</span>
-                            @endif
                         </div>
                         <time class="text-xs font-medium text-gray-400 flex items-center">
                             <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

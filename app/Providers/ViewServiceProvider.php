@@ -25,6 +25,7 @@ class ViewServiceProvider extends ServiceProvider
                 ->orderBy('views', 'desc')
                 ->take(5)
                 ->get();
+
             $view->with('trendingNews', $trendingNews);
         });
     }

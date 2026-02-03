@@ -28,19 +28,6 @@
         <form action="{{ route('news.comments.store', $news->id) }}" method="POST" class="space-y-5">
             @csrf
 
-            <div class="group">
-                <label for="title" class="block text-sm font-bold text-gray-700 mb-2 group-focus-within:text-blue-600 transition-colors">
-                    Tiêu đề <span class="text-xs font-normal text-gray-400 italic">(không bắt buộc)</span>
-                </label>
-                <input 
-                    type="text" 
-                    name="title" 
-                    id="title" 
-                    placeholder="Tóm tắt ý kiến của bạn..."
-                    class="w-full px-5 py-3 rounded-2xl border-gray-100 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none shadow-sm text-sm" 
-                    value="{{ old('title') }}" 
-                >
-            </div>
 
             <div class="group">
                 <label for="content" class="block text-sm font-bold text-gray-700 mb-2 group-focus-within:text-blue-600 transition-colors">
